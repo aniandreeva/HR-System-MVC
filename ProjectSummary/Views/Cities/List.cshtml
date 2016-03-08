@@ -1,0 +1,65 @@
+﻿@model ProjectSummary.ViewModels.CitiesVM.CitiesListVM
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Edit")
+</p>
+
+@using (Html.BeginForm("List", "Cities", FormMethod.Get))
+{
+    <div>
+        Find by name: @Html.TextBoxFor(model=>model.Search, new { @class="form-control"})
+        <input type="submit" value="Search" class="btn btn-primary"/>
+    </div>
+}
+
+@if (Model.Cities.Count==0)
+{
+    <div class="alert alert-info">Nothing Found</div>
+}
+else
+{
+    <table class="table table-hover table-striped table-bordered">
+        <tr>
+            <th>
+                @{
+                    @Html.ActionLink("Name", "List", "Cities", new RouteValueDictionary { { "SortOrder", Model.SortOrder == "name_desc" ? "name_asc" : "name_desc" }, { "Search", Model.Search } }, null)
+                }</th>
+            <th>
+                @{ 
+                    @Html.ActionLink("PostCode","List","Cities", new RouteValueDictionary { { "SortOrder", Model.SortOrder=="postCode_desc"? "postCode_asd":"postCode_desc"}, { "Search", Model.Search} }, null)
+                }
+            </th>
+            <th>
+                @{ 
+                    @Html.ActionLink("Country", "List", "Cities", new RouteValueDictionary { { "SortOrder", Model.SortOrder == "country_desc" ? "country_asc" : "country_desc" }, { "Search", Model.Search } }, null)
+                }
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Cities)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </table>
+}
